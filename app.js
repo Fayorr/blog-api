@@ -5,7 +5,7 @@ const cors = require('cors');
 const cookieparser = require('cookie-parser');
 const morgan = require('morgan');
 const methodOverride = require('method-override');
-const taskRouter = require('./routes/task.router');
+const blogRouter = require('./routes/blog.router');
 const authRouter = require('./routes/auth.router');
 
 const app = express();
@@ -39,7 +39,7 @@ app.use(async (req, res, next) => {
 });
 // Routes
 app.use('/auth', authRouter);
-app.use('/tasks', taskRouter);
+app.use('/blog', blogRouter);
 
 app.get('/', (req, res) => {
 	res.json({ message: 'Welcome to the Todo App API' });
