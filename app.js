@@ -11,15 +11,7 @@ const authRouter = require('./routes/auth.router');
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-app.use(
-	cors({
-		origin: [
-			'http://localhost:5173',
-			'https://my-todo-frontend-l8n8.onrender.com',
-		],
-		credentials: true,
-	}),
-);
+app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -42,7 +34,7 @@ app.use('/auth', authRouter);
 app.use('/blog', blogRouter);
 
 app.get('/', (req, res) => {
-	res.json({ message: 'Welcome to the Todo App API' });
+	res.json({ message: 'Welcome to the Blog App API' });
 });
 // app.get('/login', (req, res) => {
 // 	res.render('login');
