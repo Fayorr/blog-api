@@ -1,4 +1,6 @@
-const mongooose = require('mongoose');
+//add  presave hook to calculate reading time before saving the blog
+const mongoose = require('mongoose');
+const getReadingTime = require('../utils/getReadingTime');
 
 const BlogSchema = new mongoose.Schema(
 	{
@@ -8,8 +10,8 @@ const BlogSchema = new mongoose.Schema(
 			unique: true,
 		},
 		description: {
-			type: mongooose.Schema.Types.ObjectId,
-			ref: 'UserModel',
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'users',
 			required: true,
 		},
 		author: {
@@ -39,6 +41,10 @@ const BlogSchema = new mongoose.Schema(
 	},
 	{ timestamps: true },
 );
+
+BlogSchema.pre('save', function () {
+	this.reading_time = getReadingTime(this.body);
+});
 
 const BlogModel = mongoose.model('blogs', BlogSchema);
 

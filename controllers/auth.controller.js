@@ -2,20 +2,20 @@ const express = require('express');
 const { Router } = require('express');
 const router = Router();
 const UserModel = require('../models/user.model');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const secretKey = process.env.SECRET_KEY;
 
 const signup = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { first_name, last_name, email, password } = req.body;
         const user = await UserModel.findOne({ email });
         if (user) {
             return res.status(400).json({ message: 'User already exists' });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = await UserModel.create({ email, password: hashedPassword });
+        const newUser = await UserModel.create({ first_name, last_name, email, password: hashedPassword });
         const token = jwt.sign({ id: newUser._id }, secretKey, { expiresIn: '1h' });
         res.status(201).json({ token });
     } catch (error) {
@@ -32,7 +32,7 @@ const signin = async (req, res) => {
         }
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            return res.status(400).json({ message: 'Invalid password' });
+            return res.status(400).json({ message: 'Invalid Credentials' });
         }
         const token = jwt.sign({ id: user._id }, secretKey, { expiresIn: '1h' });
         res.status(200).json({ token });

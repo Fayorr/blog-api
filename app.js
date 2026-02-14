@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const methodOverride = require('method-override');
 const blogRouter = require('./routes/blog.router');
 const authRouter = require('./routes/auth.router');
+const authMiddleware = require('./middlewares/auth.middleware');
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -31,20 +32,20 @@ app.use(async (req, res, next) => {
 });
 // Routes
 app.use('/auth', authRouter);
-app.use('/blog', blogRouter);
+app.use('/blogs', blogRouter);
 
 app.get('/', (req, res) => {
 	res.json({ message: 'Welcome to the Blog App API' });
 });
-// app.get('/login', (req, res) => {
-// 	res.render('login');
-// });
-// app.get('/register', (req, res) => {
-// 	res.render('register');
-// });
-// app.get('/create', (req, res) => {
-// 	res.render('create');
-// });
+app.get('/signin', (req, res) => {
+	res.render('signin');
+});
+app.get('/signup', (req, res) => {
+	res.render('signup');
+});
+app.get('/blog', authMiddleware, (req, res) => {
+	res.render('blog');
+});
 
 // Error handling middleware
 function errorHandler(err, req, res, next) {
