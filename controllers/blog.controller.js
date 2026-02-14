@@ -1,32 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const BlogModel = require('../models/blog.model');
+const BlogService = require('../services/blog.service');
 
 //get all blogs
 const getAllBlogs = async (req, res) => {
     try {
-        const { page = 1, limit = 20, order_by = 'timestamp', state = 'published', ...filters } = req.query;
-
-        // Build query
-        const query = { state, ...filters };
-
-        // Determine sort order
-        const sort = {};
-        if (order_by === 'timestamp') {
-            sort.createdAt = -1; // Default to newest first
-        } else if (order_by === 'read_count') {
-            sort.read_count = -1;
-        } else {
-            sort[order_by] = 1;
-        }
-
-        const skip = (page - 1) * limit;
-
-        const blogs = await BlogModel.find(query)
-            .sort(sort)
-            .skip(parseInt(skip))
-            .limit(parseInt(limit));
-
+        const blogs = await BlogService.getAllBlogs(req.query);
         res.status(200).json(blogs);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -37,8 +16,7 @@ const getAllBlogs = async (req, res) => {
 const getOneBlog = async (req, res) => {
     try {
         const { id } = req.params;
-        const blog = await BlogModel.findByIdAndUpdate(id, { $inc: { read_count: 1 } }, { new: true })
-            .populate('description', '-password'); // 'description' is the user ref based on the schema
+        const blog = await BlogService.getOneBlog(id, true); // true for read count increment
 
         if (!blog) {
             return res.status(404).json({ error: 'Blog not found' });
@@ -52,7 +30,7 @@ const getOneBlog = async (req, res) => {
 // create blog
 const createBlog = async (req, res) => {
     try {
-        const blog = await BlogModel.create(req.body);
+        const blog = await BlogService.createBlog(req.body);
         res.status(201).json(blog);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -63,22 +41,18 @@ const createBlog = async (req, res) => {
 const updateBlog = async (req, res) => {
     try {
         const { id } = req.params;
-        const blog = await BlogModel.findById(id);
+        // Check service logic for specific error types or handle generally
+        const blog = await BlogService.updateBlog(id, req.user.id, req.body);
 
         if (!blog) {
             return res.status(404).json({ error: 'Blog not found' });
         }
 
-        if (blog.author.toString() !== req.user.id) {
-            return res.status(403).json({ error: 'You are not authorized to update this blog' });
-        }
-
-        // Update fields
-        Object.assign(blog, req.body);
-        await blog.save();
-
         res.status(200).json(blog);
     } catch (error) {
+        if (error.message === 'Unauthorized') {
+            return res.status(403).json({ error: 'You are not authorized to update this blog' });
+        }
         res.status(500).json({ error: error.message });
     }
 };
@@ -87,19 +61,17 @@ const updateBlog = async (req, res) => {
 const deleteBlog = async (req, res) => {
     try {
         const { id } = req.params;
-        const blog = await BlogModel.findById(id);
+        const result = await BlogService.deleteBlog(id, req.user.id);
 
-        if (!blog) {
+        if (!result) { // null if not found
             return res.status(404).json({ error: 'Blog not found' });
         }
 
-        if (blog.author.toString() !== req.user.id) {
-            return res.status(403).json({ error: 'You are not authorized to delete this blog' });
-        }
-
-        await blog.deleteOne();
         res.status(200).json({ message: 'Blog deleted successfully' });
     } catch (error) {
+        if (error.message === 'Unauthorized') {
+            return res.status(403).json({ error: 'You are not authorized to delete this blog' });
+        }
         res.status(500).json({ error: error.message });
     }
 };
@@ -107,38 +79,7 @@ const deleteBlog = async (req, res) => {
 // get owner blogs
 const getOwnerBlogs = async (req, res) => {
     try {
-        const { page = 1, limit = 20, order_by = 'timestamp', ...filters } = req.query;
-
-        // Build query - force author to be current user
-        const query = { author: req.user.id, ...filters };
-        // Note: 'author' field is [String] in schema but prompt implies single author ID ownership check. 
-        // If schema meant 'description' as user ref, we might need to adjust, but based on updateBlog check:
-        // if (blog.author.toString() !== req.user.id) ... 
-        // I will use 'author' here for consistency with that check. 
-        // Use 'description' if strict population needed, but author seems to be the ownership field per prompt.
-
-        // Wait, if author is array, finding by author: req.user.id works if array contains it? 
-        // Mongoose: { author: value } matches if array contains value.
-        // However, previous check was strict equality on toString(), implying single value or array string conversion.
-        // I'll stick to 'author' field.
-
-        // Determine sort order
-        const sort = {};
-        if (order_by === 'timestamp') {
-            sort.createdAt = -1;
-        } else if (order_by === 'read_count') {
-            sort.read_count = -1;
-        } else {
-            sort[order_by] = 1;
-        }
-
-        const skip = (page - 1) * limit;
-
-        const blogs = await BlogModel.find(query)
-            .sort(sort)
-            .skip(parseInt(skip))
-            .limit(parseInt(limit));
-
+        const blogs = await BlogService.getOwnerBlogs(req.user.id, req.query);
         res.status(200).json(blogs);
     } catch (error) {
         res.status(500).json({ error: error.message });

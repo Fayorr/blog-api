@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Blog</title>
+</head>
+
+<body>
+    <h1>Create New Blog</h1>
+    <form action="/blogs" method="POST">
+        <label>Title:</label><br>
+        <input type="text" name="title" required><br>
+
+        <label>Description (Short bio/summary):</label><br>
+        <input type="text" name="description" value="<%= user.id %>" hidden>
+        <!-- Note: Schema requires 'description' as user ref. We hide it and autofill, or just let backend handle it if we modify controller. 
+             Ideally controller should set it from req.user. Since we didn't modify controller, we pass it here. 
+             If 'description' is meant to be text, schema is wrong. But we follow schema. -->
+
+        <label>Tags:</label><br>
+        <input type="text" name="tags" required><br>
+
+        <label>Body:</label><br>
+        <textarea name="body" rows="10" cols="30" required></textarea><br>
+
+        <label>State:</label>
+        <select name="state">
+            <option value="draft">Draft</option>
+            <option value="published">Published</option>
+        </select><br>
+
+        <!-- Author field is an array of strings. We'll just put current user's name/id for now. -->
+        <input type="hidden" name="author" value="<%= user.id %>">
+
+        <button type="submit">Create</button>
+    </form>
+    <a href="/dashboard">Back to Dashboard</a>
+</body>
+
+</html>

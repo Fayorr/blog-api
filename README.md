@@ -15,7 +15,15 @@ A simple REST API for a blogging platform.
 - `POST /auth/signup` - Register a new user
 - `POST /auth/signin` - Login and receive a token
 
-### Blogs
+### Views (UI)
+- `GET /` - Public Blog Index
+- `GET /signin` & `GET /signup` - Auth Pages
+- `GET /dashboard` - User Dashboard (My Blogs)
+- `GET /new-blog` - Create Blog Form
+- `GET /blog/:id` - Show Blog
+- `GET /blog/:id/edit` - Edit Blog Form
+
+### Blogs (API)
 - `GET /blogs` - Get all published blogs (Public)
     - Query Params: `page`, `limit`, `state` (default: published), `order_by` (timestamp, read_count, etc.)
 - `POST /blogs` - Create a new blog (Authenticated)

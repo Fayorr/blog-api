@@ -18,34 +18,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(cookieparser());
-// app.set('view engine', 'ejs');
-// app.set('views', './views');
+app.set('view engine', 'ejs');
+app.set('views', './views');
 
-// Connect to DB for every request (Serverless pattern)
-app.use(async (req, res, next) => {
-	try {
-		await db.connectToDB();
-		next();
-	} catch (error) {
-		next(error);
-	}
-});
 // Routes
+const viewRouter = require('./routes/view.router');
+app.use('/', viewRouter);
 app.use('/auth', authRouter);
 app.use('/blogs', blogRouter);
-
-app.get('/', (req, res) => {
-	res.json({ message: 'Welcome to the Blog App API' });
-});
-app.get('/signin', (req, res) => {
-	res.render('signin');
-});
-app.get('/signup', (req, res) => {
-	res.render('signup');
-});
-app.get('/blog', authMiddleware, (req, res) => {
-	res.render('blog');
-});
 
 // Error handling middleware
 function errorHandler(err, req, res, next) {
@@ -74,8 +54,10 @@ function errorHandler(err, req, res, next) {
 app.use(errorHandler);
 
 if (require.main === module) {
-	app.listen(PORT, () => {
-		console.log(`Server is running on port ${PORT}`);
+	db.connectToDB().then(() => {
+		app.listen(PORT, () => {
+			console.log(`Server is running on port ${PORT}`);
+		});
 	});
 }
 

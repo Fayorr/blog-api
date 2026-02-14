@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+
+<body>
+    <h1>My Dashboard</h1>
+    <p>Welcome back! | <a href="/">Home</a> | <a href="/new-blog">Create New Blog</a></p>
+
+    <h2>My Blogs</h2>
+    <ul>
+        <% if (blogs.length> 0) { %>
+            <% blogs.forEach(blog=> { %>
+                <li>
+                    <h3>
+                        <%= blog.title %> (<%= blog.state %>)
+                    </h3>
+                    <p>Read count: <%= blog.read_count %>
+                    </p>
+                    <p>
+                        <a href="/blog/<%= blog._id %>">View</a> |
+                        <a href="/blog/<%= blog._id %>/edit">Edit</a>
+                    </p>
+                    <form action="/blogs/<%= blog._id %>?_method=DELETE" method="POST" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </li>
+                <% }) %>
+                    <% } else { %>
+                        <p>You haven't created any blogs yet.</p>
+                        <% } %>
+    </ul>
+</body>
+
+</html>

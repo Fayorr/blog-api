@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Blog</title>
+</head>
+
+<body>
+    <h1>Edit Blog</h1>
+    <form action="/blogs/<%= blog._id %>?_method=PUT" method="POST">
+        <label>Title:</label><br>
+        <input type="text" name="title" value="<%= blog.title %>" required><br>
+
+        <label>Tags:</label><br>
+        <input type="text" name="tags" value="<%= blog.tags %>" required><br>
+
+        <label>Body:</label><br>
+        <textarea name="body" rows="10" cols="30" required><%= blog.body %></textarea><br>
+
+        <label>State:</label>
+        <select name="state">
+            <option value="draft" <%=blog.state==='draft' ? 'selected' : '' %>>Draft</option>
+            <option value="published" <%=blog.state==='published' ? 'selected' : '' %>>Published</option>
+        </select><br>
+
+        <button type="submit">Update</button>
+    </form>
+    <a href="/dashboard">Back to Dashboard</a>
+</body>
+
+</html>
