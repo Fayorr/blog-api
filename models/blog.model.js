@@ -10,12 +10,11 @@ const BlogSchema = new mongoose.Schema(
 			unique: true,
 		},
 		description: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'users',
-			required: true,
+			type: String,
 		},
 		author: {
-			type: [String],
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'users',
 			required: true,
 		},
 		tags: {

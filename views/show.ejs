@@ -15,7 +15,10 @@
     </h1>
     <p>
         <strong>Author:</strong>
-        <%= blog.author.join(', ') %><br>
+        <%= blog.author.first_name %> <%= blog.author.last_name %><br>
+        <% if (blog.description) { %>
+            <strong>Description:</strong> <%= blog.description %><br>
+        <% } %>
         <strong>Created At:</strong> <%= blog.createdAt.toDateString() %><br>
         <strong>Read Count:</strong> <%= blog.read_count %> | <strong>Reading Time:</strong> <%= blog.reading_time %> min
     </p>
@@ -27,7 +30,7 @@
     <hr>
     <p>
         <a href="/">Back to Home</a>
-        <% if (user && user.id === blog.author.toString()) { %> 
+        <% if (user && user.id === blog.author._id.toString()) { %> 
             | <a href="/blog/<%= blog._id %>/edit">Edit</a>
         <% } %>
     </p>

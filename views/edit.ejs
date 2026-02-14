@@ -13,6 +13,9 @@
         <label>Title:</label><br>
         <input type="text" name="title" value="<%= blog.title %>" required><br>
 
+        <label>Description:</label><br>
+        <textarea name="description" rows="3" cols="30"><%= blog.description || '' %></textarea><br>
+
         <label>Tags:</label><br>
         <input type="text" name="tags" value="<%= blog.tags %>" required><br>
 
