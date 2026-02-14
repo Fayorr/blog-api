@@ -18,6 +18,7 @@ const signup = async (req, res) => {
         const newUser = await UserModel.create({ first_name, last_name, email, password: hashedPassword });
         const token = jwt.sign({ id: newUser._id }, secretKey, { expiresIn: '1h' });
         res.status(201).json({ token });
+        res.redirect('/dashboard');
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -36,6 +37,7 @@ const signin = async (req, res) => {
         }
         const token = jwt.sign({ id: user._id }, secretKey, { expiresIn: '1h' });
         res.status(200).json({ token });
+        res.redirect('/dashboard');
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
