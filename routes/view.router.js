@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
 });
 
 // Blog List Page (Dynamic)
-router.get('/blogs', async (req, res) => {
+router.get('/blog-list', async (req, res) => {
 	try {
 		const blogs = await BlogService.getAllBlogs({
 			state: 'published',
