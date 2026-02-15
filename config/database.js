@@ -1,14 +1,33 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
+let cachedConnection = null;
+
 const connectToDB = async () => {
+	if (cachedConnection) return cachedConnection;
+
+	cachedConnection = mongoose
+		.connect(process.env.MONGODB_URI)
+		.then(() => {
+			console.log('Connected to MongoDB');
+		})
+		.catch((error) => {
+			cachedConnection = null;
+			console.error('Error connecting to MongoDB:', error);
+			throw error;
+		});
+
+	return cachedConnection;
+};
+
+// Middleware that ensures DB is connected before handling requests
+const ensureConnection = async (req, res, next) => {
 	try {
-		await mongoose.connect(process.env.MONGODB_URI);
-		console.log('Connected to MongoDB');
+		await connectToDB();
+		next();
 	} catch (error) {
-		console.error('Error connecting to MongoDB:', error);
-		process.exit(1);
+		res.status(500).json({ error: 'Database connection failed' });
 	}
 };
 
-module.exports = { connectToDB };
+module.exports = { connectToDB, ensureConnection };
