@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 const db = require('./config/database');
 const express = require('express');
 const cors = require('cors');
@@ -12,7 +13,6 @@ const authMiddleware = require('./middlewares/auth.middleware');
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-
 db.connectToDB();
 
 app.use(cors());
@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(cookieparser());
 app.set('view engine', 'ejs');
-app.set('views', './views');
+app.set('views', path.join(__dirname, 'views'));
 
 // Routes
 const viewRouter = require('./routes/view.router');
