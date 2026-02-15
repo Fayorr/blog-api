@@ -55,6 +55,12 @@ const updateBlog = async (req, res) => {
 			return res.status(404).json({ error: 'Blog not found' });
 		}
 
+		// If request came from a form, redirect to dashboard
+		if (
+			req.headers['content-type']?.includes('application/x-www-form-urlencoded')
+		) {
+			return res.redirect('/dashboard');
+		}
 		res.status(200).json(blog);
 	} catch (error) {
 		if (error.message === 'Unauthorized') {
@@ -77,6 +83,12 @@ const deleteBlog = async (req, res) => {
 			return res.status(404).json({ error: 'Blog not found' });
 		}
 
+		// If request came from a form, redirect to dashboard
+		if (
+			req.headers['content-type']?.includes('application/x-www-form-urlencoded')
+		) {
+			return res.redirect('/dashboard');
+		}
 		res.status(200).json({ message: 'Blog deleted successfully' });
 	} catch (error) {
 		if (error.message === 'Unauthorized') {
