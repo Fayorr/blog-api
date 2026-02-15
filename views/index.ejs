@@ -1,36 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include('partials/header') %>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog App</title>
-</head>
-
-<body>
+<div class="dash-header">
     <h1>Published Blogs</h1>
-    <% if (user) { %>
-        <p>Welcome, <%= user.id || 'User' %> | <a href="/">Home</a> | <a href="/dashboard">My Dashboard</a> | <a href="/new-blog">New Blog</a> | <a href="/auth/logout" style="color: red;">Logout</a>
-        </p>
-        <% } else { %>
-            <p><a href="/">Home</a> | <a href="/signin">Sign In</a> | <a href="/signup">Sign Up</a></p>
-            <% } %>
+</div>
 
-                <ul>
-                    <% if (blogs.length> 0) { %>
-                        <% blogs.forEach(blog=> { %>
-                            <li>
-                                <h3><a href="/blog/<%= blog._id %>">
-                                        <%= blog.title %>
-                                    </a></h3>
-                                <p>By: <%= blog.author ? (blog.author.first_name + ' ' + blog.author.last_name) : 'Unknown Author' %></p> 
-                    <p>Read count: <%= blog.read_count %> | Reading time: <%= blog.reading_time %> min</p>
-                    <p><%= blog.createdAt.toDateString() %></p>
-                </li>
-            <% }) %>
-        <% } else { %>
-            <p>No published blogs found.</p>
-        <% } %>
-    </ul>
-</body>
-</html>
+<div class="blog-grid">
+    <% if (blogs.length > 0) { %>
+        <% blogs.forEach(blog => { %>
+            <article class="glass-ui blog-card">
+                <div class="blog-meta">
+                    <%= blog.createdAt.toDateString() %> • <%= blog.reading_time %> min read
+                </div>
+                <h2 style="font-size: 1.5rem; -webkit-text-fill-color: var(--text-main);">
+                    <a href="/blog/<%= blog._id %>"><%= blog.title %></a>
+                </h2>
+                <p style="color: var(--text-muted); flex-grow: 1; margin-bottom: 1.5rem;">
+                    <%= blog.description || 'No description available for this post.' %>
+                </p>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: auto;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="font-size: 0.875rem; font-weight: 600;">
+                            <%= blog.author ? (blog.author.first_name + ' ' + blog.author.last_name) : 'Unknown Author' %>
+                        </span>
+                    </div>
+                    <div class="blog-meta">
+                        👁️ <%= blog.read_count %>
+                    </div>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <% if (blog.tags) { %>
+                        <% blog.tags.split(',').forEach(tag => { %>
+                            <span class="tag"><%= tag.trim() %></span>
+                        <% }) %>
+                    <% } %>
+                </div>
+            </article>
+        <% }) %>
+    <% } else { %>
+        <div class="glass-ui" style="grid-column: 1 / -1; text-align: center; padding: 4rem;">
+            <p style="color: var(--text-muted);">No published blogs found yet.</p>
+            <a href="/new-blog" class="btn btn-primary" style="margin-top: 1rem;">Start the first one</a>
+        </div>
+    <% } %>
+</div>
+
+<%- include('partials/footer') %>

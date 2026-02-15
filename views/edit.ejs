@@ -1,36 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include('partials/header') %>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Blog</title>
-</head>
+<div style="max-width: 800px; margin: 0 auto;">
+    <div class="dash-header">
+        <h1>Edit Blog</h1>
+        <a href="/dashboard" class="btn btn-secondary">Cancel</a>
+    </div>
 
-<body>
-    <h1>Edit Blog</h1>
-    <form action="/blogs/<%= blog._id %>?_method=PUT" method="POST">
-        <label>Title:</label><br>
-        <input type="text" name="title" value="<%= blog.title %>" required><br>
+    <form action="/blogs/<%= blog._id %>?_method=PUT" method="POST" class="glass-ui">
+        <div class="form-group">
+            <label for="title">Blog Title</label>
+            <input type="text" id="title" name="title" value="<%= blog.title %>" required>
+        </div>
 
-        <label>Description:</label><br>
-        <textarea name="description" rows="3" cols="30"><%= blog.description || '' %></textarea><br>
+        <div class="form-group">
+            <label for="description">Short Description</label>
+            <textarea id="description" name="description" rows="2" placeholder="What is this story about?"><%= blog.description || '' %></textarea>
+        </div>
 
-        <label>Tags:</label><br>
-        <input type="text" name="tags" value="<%= blog.tags %>" required><br>
+        <div class="form-group">
+            <label for="tags">Tags (comma separated)</label>
+            <input type="text" id="tags" name="tags" value="<%= blog.tags %>" required>
+        </div>
 
-        <label>Body:</label><br>
-        <textarea name="body" rows="10" cols="30" required><%= blog.body %></textarea><br>
+        <div class="form-group">
+            <label for="body">Content (Markdown supported)</label>
+            <textarea id="body" name="body" rows="12" required><%= blog.body %></textarea>
+        </div>
 
-        <label>State:</label>
-        <select name="state">
-            <option value="draft" <%=blog.state==='draft' ? 'selected' : '' %>>Draft</option>
-            <option value="published" <%=blog.state==='published' ? 'selected' : '' %>>Published</option>
-        </select><br>
+        <div class="form-group">
+            <label for="state">Publishing State</label>
+            <select id="state" name="state">
+                <option value="draft" <%= blog.state === 'draft' ? 'selected' : '' %>>Draft</option>
+                <option value="published" <%= blog.state === 'published' ? 'selected' : '' %>>Published</option>
+            </select>
+        </div>
 
-        <button type="submit">Update</button>
+        <div style="padding-top: 2rem; border-top: 1px solid var(--border); margin-top: 2rem;">
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Update Blog</button>
+        </div>
     </form>
-    <a href="/dashboard">Back to Dashboard</a>
-</body>
+</div>
 
-</html>
+<%- include('partials/footer') %>

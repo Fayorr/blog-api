@@ -1,60 +1,89 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1.0"
-		/>
-		<title>New Blog</title>
-	</head>
+<%- include('partials/header') %>
 
-	<body>
+<div style="max-width: 800px; margin: 0 auto">
+	<div class="dash-header">
 		<h1>Create New Blog</h1>
-		<form
-			action="/blogs"
-			method="POST"
+		<a
+			href="/dashboard"
+			class="btn btn-secondary"
+			>Cancel</a
 		>
-			<label>Title:</label><br />
+	</div>
+
+	<form
+		action="/blogs"
+		method="POST"
+		class="glass-ui"
+	>
+		<div class="form-group">
+			<label for="title">Blog Title</label>
 			<input
 				type="text"
+				id="title"
 				name="title"
+				placeholder="A catchy title for your story"
 				required
-			/><br />
+			/>
+		</div>
 
-			<label>Description:</label><br />
+		<div class="form-group">
+			<label for="description">Short Description</label>
 			<textarea
+				id="description"
 				name="description"
-				rows="3"
-				cols="30"
-				placeholder="A short summary of your blog..."
-			></textarea
-			><br />
+				rows="2"
+				placeholder="What is this story about?"
+			></textarea>
+		</div>
 
-			<label>Tags:</label><br />
+		<div class="form-group">
+			<label for="tags">Tags (comma separated)</label>
 			<input
 				type="text"
+				id="tags"
 				name="tags"
+				placeholder="tech, development, nodejs"
 				required
-			/><br />
+			/>
+		</div>
 
-			<label>Body:</label><br />
+		<div class="form-group">
+			<label for="body">Content (Markdown supported)</label>
 			<textarea
+				id="body"
 				name="body"
-				rows="10"
-				cols="30"
+				rows="12"
+				placeholder="Start writing your story here..."
 				required
-			></textarea
-			><br />
+			></textarea>
+		</div>
 
-			<label>State:</label>
-			<select name="state">
-				<option value="draft">Draft</option>
-				<option value="published">Published</option></select
-			><br />
+		<div
+			style="
+				padding: 1.5rem 0 0.5rem;
+				border-top: 1px solid var(--border);
+				margin-top: 2rem;
+			"
+		>
+			<p
+				style="
+					color: var(--text-muted);
+					font-size: 0.875rem;
+					margin-bottom: 1rem;
+				"
+			>
+				💡 Blog will be created in <strong>Draft</strong> state. You can publish
+				it anytime from your dashboard.
+			</p>
+			<button
+				type="submit"
+				class="btn btn-primary"
+				style="width: 100%"
+			>
+				Create Blog
+			</button>
+		</div>
+	</form>
+</div>
 
-			<button type="submit">Create</button>
-		</form>
-		<a href="/dashboard">Back to Dashboard</a>
-	</body>
-</html>
+<%- include('partials/footer') %>

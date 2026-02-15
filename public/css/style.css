@@ -1,0 +1,236 @@
+:root {
+	--primary: #6366f1;
+	--primary-hover: #4f46e5;
+	--secondary: #ec4899;
+	--accent: #8b5cf6;
+	--bg-main: #0f172a;
+	--bg-card: rgba(30, 41, 59, 0.7);
+	--border: rgba(148, 163, 184, 0.1);
+	--text-main: #f8fafc;
+	--text-muted: #94a3b8;
+	--glass: rgba(255, 255, 255, 0.03);
+	--glass-border: rgba(255, 255, 255, 0.05);
+	--transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	--shadow:
+		0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family:
+		'Inter',
+		-apple-system,
+		BlinkMacSystemFont,
+		'Segoe UI',
+		Roboto,
+		Helvetica,
+		Arial,
+		sans-serif;
+	background-color: var(--bg-main);
+	color: var(--text-main);
+	line-height: 1.6;
+	min-height: 100vh;
+	background-image:
+		radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+		radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.1) 0px, transparent 50%);
+}
+
+.container {
+	max-width: 1000px;
+	margin: 0 auto;
+	padding: 2rem;
+}
+
+/* Glassmorphism Classes */
+.glass-ui {
+	background: var(--glass);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border: 1px solid var(--glass-border);
+	border-radius: 1rem;
+	padding: 1.5rem;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4 {
+	background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	margin-bottom: 1rem;
+	font-weight: 700;
+}
+
+h1 {
+	font-size: 2.5rem;
+}
+h2 {
+	font-size: 1.8rem;
+}
+
+/* Navigation */
+nav {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1rem 2rem;
+	margin-bottom: 2rem;
+	border-bottom: 1px solid var(--border);
+}
+
+.nav-links {
+	display: flex;
+	gap: 1.5rem;
+	align-items: center;
+}
+
+a {
+	color: var(--text-main);
+	text-decoration: none;
+	transition: var(--transition);
+}
+
+a:hover {
+	color: var(--primary);
+}
+
+/* Buttons */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.75rem 1.5rem;
+	border-radius: 0.5rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: var(--transition);
+	border: none;
+	gap: 0.5rem;
+}
+
+.btn-primary {
+	background-color: var(--primary);
+	color: white;
+}
+
+.btn-primary:hover {
+	background-color: var(--primary-hover);
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+.btn-secondary {
+	background: var(--glass);
+	border: 1px solid var(--glass-border);
+	color: var(--text-main);
+}
+
+.btn-secondary:hover {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-danger {
+	background-color: #ef4444;
+	color: white;
+}
+
+.btn-danger:hover {
+	background-color: #dc2626;
+}
+
+/* Blog Cards */
+.blog-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 2rem;
+}
+
+.blog-card {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	transition: var(--transition);
+}
+
+.blog-card:hover {
+	transform: translateY(-5px);
+	border-color: var(--primary);
+}
+
+.blog-meta {
+	font-size: 0.875rem;
+	color: var(--text-muted);
+	margin-bottom: 0.5rem;
+}
+
+.tag {
+	display: inline-block;
+	padding: 0.25rem 0.5rem;
+	background: rgba(99, 102, 241, 0.1);
+	color: var(--primary);
+	border-radius: 9999px;
+	font-size: 0.75rem;
+	margin-right: 0.5rem;
+}
+
+/* Forms */
+.form-group {
+	margin-bottom: 1.5rem;
+}
+
+label {
+	display: block;
+	margin-bottom: 0.5rem;
+	color: var(--text-muted);
+	font-size: 0.875rem;
+}
+
+input,
+textarea,
+select {
+	width: 100%;
+	padding: 0.75rem 1rem;
+	background: rgba(15, 23, 42, 0.5);
+	border: 1px solid var(--glass-border);
+	border-radius: 0.5rem;
+	color: white;
+	outline: none;
+	transition: var(--transition);
+}
+
+input:focus,
+textarea:focus {
+	border-color: var(--primary);
+	background: rgba(15, 23, 42, 0.8);
+}
+
+/* Dashboard Specifics */
+.dash-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 2rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+main {
+	animation: fadeIn 0.5s ease-out forwards;
+}

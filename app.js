@@ -27,6 +27,9 @@ app.use(cookieparser());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Static files
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Ensure DB connection before any request
 app.use(db.ensureConnection);
 

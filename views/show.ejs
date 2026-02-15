@@ -1,38 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include('partials/header') %>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <%= blog.title %>
-    </title>
-</head>
+<article style="max-width: 800px; margin: 0 auto;">
+    <header style="margin-bottom: 3rem;">
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+            <% if (blog.tags) { %>
+                <% blog.tags.split(',').forEach(tag => { %>
+                    <span class="tag"><%= tag.trim() %></span>
+                <% }) %>
+            <% } %>
+        </div>
+        
+        <h1><%= blog.title %></h1>
+        
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border);">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.25rem;">
+                    <%= blog.author.first_name[0] %>
+                </div>
+                <div>
+                    <div style="font-weight: 600;"><%= blog.author.first_name %> <%= blog.author.last_name %></div>
+                    <div class="blog-meta"><%= blog.createdAt.toDateString() %> • <%= blog.reading_time %> min read</div>
+                </div>
+            </div>
+            
+            <div class="blog-meta" style="font-size: 1.1rem;">
+                👁️ <%= blog.read_count %>
+            </div>
+        </div>
+    </header>
 
-<body>
-    <h1>
-        <%= blog.title %>
-    </h1>
-    <p>
-        <strong>Author:</strong>
-        <%= blog.author.first_name %> <%= blog.author.last_name %><br>
-        <% if (blog.description) { %>
-            <strong>Description:</strong> <%= blog.description %><br>
-        <% } %>
-        <strong>Created At:</strong> <%= blog.createdAt.toDateString() %><br>
-        <strong>Read Count:</strong> <%= blog.read_count %> | <strong>Reading Time:</strong> <%= blog.reading_time %> min
-    </p>
-
-    <div>
-        <p><%= blog.body %></p>
+    <div class="glass-ui" style="background: var(--bg-card); padding: 3rem; font-size: 1.125rem; line-height: 1.8; color: #e2e8f0;">
+        <p style="white-space: pre-wrap;"><%= blog.body %></p>
     </div>
 
-    <hr>
-    <p>
-        <a href="/">Back to Home</a>
-        <% if (user && user.id === blog.author._id.toString()) { %> 
-            | <a href="/blog/<%= blog._id %>/edit">Edit</a>
+    <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+        <a href="/blog-list" class="btn btn-secondary">← Back to Explore</a>
+        
+        <% if (locals.user && locals.user.id === blog.author._id.toString()) { %> 
+            <a href="/blog/<%= blog._id %>/edit" class="btn btn-primary">Edit Original Post</a>
         <% } %>
-    </p>
-</body>
-</html>
+    </footer>
+</article>
+
+<%- include('partials/footer') %>
