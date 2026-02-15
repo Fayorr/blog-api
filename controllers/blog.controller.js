@@ -30,7 +30,7 @@ const getOneBlog = async (req, res) => {
 // create blog
 const createBlog = async (req, res) => {
 	try {
-		const blogData = { ...req.body, author: req.user.id };
+		const blogData = { ...req.body, author: req.user.id, state: 'draft' };
 		const blog = await BlogService.createBlog(blogData);
 		// If request came from a form, redirect to dashboard
 		if (

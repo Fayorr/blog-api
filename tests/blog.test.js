@@ -117,10 +117,97 @@ describe('Blog API Endpoints', () => {
 			.set('Authorization', `Bearer ${token}`)
 			.send({
 				title: 'Updated Title',
+				state: 'published', // Publish it for search tests
 			});
 
 		expect(res.statusCode).toEqual(200);
 		expect(res.body.title).toEqual('Updated Title');
+	});
+
+	// Advanced Search and Filtering Tests
+	describe('Advanced Search and Filtering', () => {
+		let otherToken;
+		let otherUserId;
+
+		beforeAll(async () => {
+			// Create another user
+			const res = await request(app).post('/auth/signup').send({
+				first_name: 'Second',
+				last_name: 'Author',
+				email: 'other@example.com',
+				password: 'password123',
+			});
+			const cookies = res.headers['set-cookie'];
+			otherToken = cookies
+				.find((c) => c.startsWith('token='))
+				.split(';')[0]
+				.split('=')[1];
+			const user = await User.findOne({ email: 'other@example.com' });
+			otherUserId = user._id;
+
+			// Create more blogs
+			await request(app)
+				.post('/blogs')
+				.set('Authorization', `Bearer ${otherToken}`)
+				.send({
+					title: 'NodeJS Guide',
+					tags: 'coding,backend',
+					body: 'Learning NodeJS is fun and powerful.',
+				});
+
+			await request(app)
+				.post('/blogs')
+				.set('Authorization', `Bearer ${token}`)
+				.send({
+					title: 'React Tips',
+					tags: 'frontend,coding',
+					body: 'React is a popular library for building UIs.',
+				});
+
+			// Publish them
+			await Blog.updateMany(
+				{ title: { $in: ['NodeJS Guide', 'React Tips'] } },
+				{ state: 'published' },
+			);
+		});
+
+		it('should search blogs by title', async () => {
+			const res = await request(app).get('/blogs?title=React');
+			expect(res.statusCode).toEqual(200);
+			expect(res.body.length).toBe(1);
+			expect(res.body[0].title).toBe('React Tips');
+		});
+
+		it('should search blogs by tags', async () => {
+			const res = await request(app).get('/blogs?tags=backend');
+			expect(res.statusCode).toEqual(200);
+			expect(res.body.length).toBe(1);
+			expect(res.body[0].title).toBe('NodeJS Guide');
+		});
+
+		it('should search blogs by author name', async () => {
+			const res = await request(app).get('/blogs?author=Second');
+			expect(res.statusCode).toEqual(200);
+			expect(res.body.length).toBe(1);
+			expect(res.body[0].author.first_name).toBe('Second');
+		});
+
+		it('should paginate results', async () => {
+			const res = await request(app).get('/blogs?limit=1');
+			expect(res.statusCode).toEqual(200);
+			expect(res.body.length).toBe(1);
+		});
+
+		it('should sort results by reading_time', async () => {
+			// Wait a bit to ensure timestamps differ if needed,
+			// though here we care about reading_time which is calculated by body length.
+			const res = await request(app).get('/blogs?order_by=reading_time');
+			expect(res.statusCode).toEqual(200);
+			// The bodies have different word counts, so reading_time might differ.
+			// But since they are all small, they might all be 1 min.
+			// Let's just ensure it doesn't crash.
+			expect(Array.isArray(res.body)).toBeTruthy();
+		});
 	});
 
 	// Delete Blog

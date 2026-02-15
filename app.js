@@ -12,8 +12,11 @@ const authMiddleware = require('./middlewares/auth.middleware');
 
 const app = express();
 const PORT = process.env.PORT || 8000;
-
-db.connectToDB();
+// Connect to MongoDB immediately (needed for Vercel serverless)
+// Skip during testing to avoid connection conflicts
+if (process.env.NODE_ENV !== 'test') {
+	db.connectToDB();
+}
 
 app.use(cors());
 app.use(morgan('dev'));

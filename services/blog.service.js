@@ -1,4 +1,5 @@
 const BlogModel = require('../models/blog.model');
+const UserModel = require('../models/user.model');
 
 // Get all blogs with filtering, sorting, and pagination
 const getAllBlogs = async (query) => {
@@ -7,16 +8,45 @@ const getAllBlogs = async (query) => {
 		limit = 20,
 		order_by = 'timestamp',
 		state = 'published',
+		author,
+		title,
+		tags,
 		...filters
 	} = query;
 
 	const buildQuery = { state, ...filters };
 
+	// Search by title (regex)
+	if (title) {
+		buildQuery.title = { $regex: title, $options: 'i' };
+	}
+
+	// Search by tags (regex - assuming comma separated or partial match)
+	if (tags) {
+		buildQuery.tags = { $regex: tags, $options: 'i' };
+	}
+
+	// Search by author name
+	if (author) {
+		const authors = await UserModel.find({
+			$or: [
+				{ first_name: { $regex: author, $options: 'i' } },
+				{ last_name: { $regex: author, $options: 'i' } },
+			],
+		});
+		const authorIds = authors.map((a) => a._id);
+		buildQuery.author = { $in: authorIds };
+	}
+
 	const sort = {};
+	const sortOrder = -1; // Default to descending for these metrics
+
 	if (order_by === 'timestamp') {
-		sort.createdAt = -1;
+		sort.createdAt = sortOrder;
 	} else if (order_by === 'read_count') {
-		sort.read_count = -1;
+		sort.read_count = sortOrder;
+	} else if (order_by === 'reading_time') {
+		sort.reading_time = sortOrder;
 	} else {
 		sort[order_by] = 1;
 	}
