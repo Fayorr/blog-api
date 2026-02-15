@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog App - Welcome</title>
+</head>
+
+<body>
+    <h1>Welcome to the Blog App</h1>
+    <p>Discover interesting stories from our writers.</p>
+
+    <div style="margin-top: 20px;">
+        <a href="/blogs" style="padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">Go to Published Blogs</a>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <% if (user) { %>
+            <p>Welcome back! <a href="/dashboard">Go to Dashboard</a></p>
+        <% } else { %>
+            <p><a href="/signin">Sign In</a> or <a href="/signup">Sign Up</a> to start writing.</p>
+        <% } %>
+    </div>
+</body>
+
+</html>

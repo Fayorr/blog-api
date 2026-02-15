@@ -23,7 +23,7 @@
                                 <h3><a href="/blog/<%= blog._id %>">
                                         <%= blog.title %>
                                     </a></h3>
-                                <p>By: <%= blog.author.join(', ') %></p> 
+                                <p>By: <%= blog.author ? (blog.author.first_name + ' ' + blog.author.last_name) : 'Unknown Author' %></p> 
                     <p>Read count: <%= blog.read_count %> | Reading time: <%= blog.reading_time %> min</p>
                     <p><%= blog.createdAt.toDateString() %></p>
                 </li>

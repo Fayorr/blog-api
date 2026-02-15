@@ -24,6 +24,7 @@ const getAllBlogs = async (query) => {
 	const skip = (page - 1) * limit;
 
 	const blogs = await BlogModel.find(buildQuery)
+		.populate('author', 'first_name last_name')
 		.sort(sort)
 		.skip(parseInt(skip))
 		.limit(parseInt(limit));

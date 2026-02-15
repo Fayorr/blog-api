@@ -3,8 +3,13 @@ const router = express.Router();
 const BlogService = require('../services/blog.service');
 const authMiddleware = require('../middlewares/auth.middleware');
 
-// Public Home - List Published Blogs
-router.get('/', async (req, res) => {
+// Public Landing Page (Static)
+router.get('/', (req, res) => {
+	res.render('home', { user: req.user || null });
+});
+
+// Blog List Page (Dynamic)
+router.get('/blogs', async (req, res) => {
 	try {
 		const blogs = await BlogService.getAllBlogs({
 			state: 'published',
