@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 
 const secretKey = process.env.SECRET_KEY;
 
-const signup = async (req, res) => {
+const signup = async (req, res, next) => {
 	try {
 		const { first_name, last_name, email, password } = req.body;
 		const user = await UserModel.findOne({ email });
@@ -27,11 +27,11 @@ const signup = async (req, res) => {
 		res.cookie('token', token, { httpOnly: true });
 		res.redirect('/dashboard');
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		next(error);
 	}
 };
 
-const signin = async (req, res) => {
+const signin = async (req, res, next) => {
 	try {
 		const { email, password } = req.body;
 		const user = await UserModel.findOne({ email });
@@ -48,7 +48,7 @@ const signin = async (req, res) => {
 		res.cookie('token', token, { httpOnly: true });
 		res.redirect('/dashboard');
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		next(error);
 	}
 };
 

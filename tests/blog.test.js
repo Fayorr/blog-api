@@ -124,6 +124,35 @@ describe('Blog API Endpoints', () => {
 		expect(res.body.title).toEqual('Updated Title');
 	});
 
+	// Duplicate Title Test
+	it('should return 400 when creating a blog with a duplicate title', async () => {
+		const uniqueTitle = 'Another Unique Title';
+		// First create a blog
+		await request(app)
+			.post('/blogs')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				title: uniqueTitle,
+				description: 'First version',
+				tags: 'test',
+				body: 'First body.',
+			});
+
+		// Try to create another one with the same title
+		const res = await request(app)
+			.post('/blogs')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				title: uniqueTitle,
+				description: 'Second version',
+				tags: 'test',
+				body: 'Second body.',
+			});
+
+		expect(res.statusCode).toEqual(400);
+		expect(res.body.error).toEqual('Title already exists');
+	});
+
 	// Advanced Search and Filtering Tests
 	describe('Advanced Search and Filtering', () => {
 		let otherToken;

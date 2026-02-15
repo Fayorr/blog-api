@@ -3,17 +3,17 @@ const router = express.Router();
 const BlogService = require('../services/blog.service');
 
 //get all blogs
-const getAllBlogs = async (req, res) => {
+const getAllBlogs = async (req, res, next) => {
 	try {
 		const blogs = await BlogService.getAllBlogs(req.query);
 		res.status(200).json(blogs);
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		next(error);
 	}
 };
 
 // get one blog
-const getOneBlog = async (req, res) => {
+const getOneBlog = async (req, res, next) => {
 	try {
 		const { id } = req.params;
 		const blog = await BlogService.getOneBlog(id, true); // true for read count increment
@@ -23,12 +23,12 @@ const getOneBlog = async (req, res) => {
 		}
 		res.status(200).json(blog);
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		next(error);
 	}
 };
 
 // create blog
-const createBlog = async (req, res) => {
+const createBlog = async (req, res, next) => {
 	try {
 		const blogData = { ...req.body, author: req.user.id, state: 'draft' };
 		const blog = await BlogService.createBlog(blogData);
@@ -40,12 +40,12 @@ const createBlog = async (req, res) => {
 		}
 		res.status(201).json(blog);
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		next(error);
 	}
 };
 
 // update blog
-const updateBlog = async (req, res) => {
+const updateBlog = async (req, res, next) => {
 	try {
 		const { id } = req.params;
 		// Check service logic for specific error types or handle generally
@@ -64,16 +64,15 @@ const updateBlog = async (req, res) => {
 		res.status(200).json(blog);
 	} catch (error) {
 		if (error.message === 'Unauthorized') {
-			return res
-				.status(403)
-				.json({ error: 'You are not authorized to update this blog' });
+			error.statusCode = 403;
+			error.message = 'You are not authorized to update this blog';
 		}
-		res.status(500).json({ error: error.message });
+		next(error);
 	}
 };
 
 // delete blog
-const deleteBlog = async (req, res) => {
+const deleteBlog = async (req, res, next) => {
 	try {
 		const { id } = req.params;
 		const result = await BlogService.deleteBlog(id, req.user.id);
@@ -92,21 +91,20 @@ const deleteBlog = async (req, res) => {
 		res.status(200).json({ message: 'Blog deleted successfully' });
 	} catch (error) {
 		if (error.message === 'Unauthorized') {
-			return res
-				.status(403)
-				.json({ error: 'You are not authorized to delete this blog' });
+			error.statusCode = 403;
+			error.message = 'You are not authorized to delete this blog';
 		}
-		res.status(500).json({ error: error.message });
+		next(error);
 	}
 };
 
 // get owner blogs
-const getOwnerBlogs = async (req, res) => {
+const getOwnerBlogs = async (req, res, next) => {
 	try {
 		const blogs = await BlogService.getOwnerBlogs(req.user.id, req.query);
 		res.status(200).json(blogs);
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		next(error);
 	}
 };
 

@@ -41,15 +41,25 @@ app.use('/blogs', blogRouter);
 
 // Error handling middleware
 function errorHandler(err, req, res, next) {
-	console.error(err.message);
+	console.error(err);
 
-	// Auth-related errors
+	// Mongoose/MongoDB duplicate key error
+	if (err.code === 11000) {
+		const field = Object.keys(err.keyValue)[0];
+		const message = `${field.charAt(0).toUpperCase() + field.slice(1)} already exists`;
+		return res.status(400).json({ error: message, status: 400 });
+	}
+
+	// Auth-related errors or other thrown errors with message
 	if (
 		err.message === 'Invalid email or password' ||
 		err.message === 'User already exists' ||
-		err.message === 'Passwords do not match'
+		err.message === 'Passwords do not match' ||
+		err.message === 'Unauthorized' ||
+		err.message === 'You are not authorized to update this blog' ||
+		err.message === 'You are not authorized to delete this blog'
 	) {
-		const statusCode = 400;
+		const statusCode = err.statusCode || 400;
 		return res
 			.status(statusCode)
 			.json({ error: err.message, status: statusCode });
@@ -61,7 +71,7 @@ function errorHandler(err, req, res, next) {
 		: 'Something went wrong, please try again later';
 
 	// Always return JSON
-	return res.status(statusCode).json({ message, status: statusCode });
+	return res.status(statusCode).json({ error: message, status: statusCode });
 }
 app.use(errorHandler);
 
