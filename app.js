@@ -24,6 +24,9 @@ app.use(cookieparser());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Ensure DB connection before any request
+app.use(db.ensureConnection);
+
 // Routes
 const viewRouter = require('./routes/view.router');
 app.use('/', viewRouter);
