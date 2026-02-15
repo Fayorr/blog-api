@@ -52,7 +52,13 @@ const signin = async (req, res) => {
 	}
 };
 
+const logout = (req, res) => {
+	res.clearCookie('token');
+	res.redirect('/');
+};
+
 module.exports = {
 	signup,
 	signin,
+	logout,
 };

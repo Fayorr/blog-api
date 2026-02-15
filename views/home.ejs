@@ -17,7 +17,7 @@
 
     <div style="margin-top: 20px;">
         <% if (user) { %>
-            <p>Welcome back! <a href="/dashboard">Go to Dashboard</a></p>
+            <p>Welcome back! <a href="/dashboard">Go to Dashboard</a> | <a href="/auth/logout" style="color: red;">Logout</a></p>
         <% } else { %>
             <p><a href="/signin">Sign In</a> or <a href="/signup">Sign Up</a> to start writing.</p>
         <% } %>

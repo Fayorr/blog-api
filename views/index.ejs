@@ -10,10 +10,10 @@
 <body>
     <h1>Published Blogs</h1>
     <% if (user) { %>
-        <p>Welcome, <%= user.id || 'User' %> | <a href="/dashboard">My Dashboard</a> | <a href="/new-blog">New Blog</a>
+        <p>Welcome, <%= user.id || 'User' %> | <a href="/">Home</a> | <a href="/dashboard">My Dashboard</a> | <a href="/new-blog">New Blog</a> | <a href="/auth/logout" style="color: red;">Logout</a>
         </p>
         <% } else { %>
-            <p><a href="/signin">Sign In</a> | <a href="/signup">Sign Up</a></p>
+            <p><a href="/">Home</a> | <a href="/signin">Sign In</a> | <a href="/signup">Sign Up</a></p>
             <% } %>
 
                 <ul>
