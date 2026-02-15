@@ -12,6 +12,9 @@ const authMiddleware = require('./middlewares/auth.middleware');
 const app = express();
 const PORT = process.env.PORT || 8000;
 
+
+db.connectToDB();
+
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
@@ -54,10 +57,8 @@ function errorHandler(err, req, res, next) {
 app.use(errorHandler);
 
 if (require.main === module) {
-	db.connectToDB().then(() => {
-		app.listen(PORT, () => {
-			console.log(`Server is running on port ${PORT}`);
-		});
+	app.listen(PORT, () => {
+		console.log(`Server is running on port ${PORT}`);
 	});
 }
 
