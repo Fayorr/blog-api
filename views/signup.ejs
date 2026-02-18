@@ -1,14 +1,22 @@
 <%- include('partials/header') %>
 
-<div style="max-width: 450px; margin: 2rem auto">
+<div class="auth-container">
 	<div class="glass-ui">
-		<h1 style="text-align: center; margin-bottom: 2rem">Join Blogify</h1>
+		<h1
+			style="
+				text-align: center;
+				margin-bottom: 2rem;
+				-webkit-text-fill-color: var(--text-main);
+			"
+		>
+			Join Blogify
+		</h1>
 
 		<form
 			action="/auth/signup"
 			method="POST"
 		>
-			<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem">
+			<div class="grid-2">
 				<div class="form-group">
 					<label for="first_name">First Name</label>
 					<input
@@ -55,8 +63,8 @@
 
 			<button
 				type="submit"
-				class="btn btn-primary"
-				style="width: 100%; margin-top: 1rem"
+				class="btn btn-primary btn-full"
+				style="margin-top: 1rem"
 			>
 				Create Account
 			</button>

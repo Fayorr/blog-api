@@ -17,7 +17,7 @@
                 <p style="color: var(--text-muted); flex-grow: 1; margin-bottom: 1.5rem;">
                     <%= blog.description || 'No description available for this post.' %>
                 </p>
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: auto;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: auto; flex-wrap: wrap; gap: 0.5rem;">
                     <div style="display: flex; align-items: center; gap: 0.5rem;">
                         <span style="font-size: 0.875rem; font-weight: 600;">
                             <%= blog.author ? (blog.author.first_name + ' ' + blog.author.last_name) : 'Unknown Author' %>

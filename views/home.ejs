@@ -1,12 +1,12 @@
 <%- include('partials/header') %>
 
-<section style="text-align: center; padding: 4rem 0;">
+<section class="hero">
     <h1>Write, Share, Inspire.</h1>
-    <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2.5rem;">
+    <p>
         The modern blogging platform for developers and creative writers. Built for speed, designed for clarity.
     </p>
 
-    <div style="display: flex; gap: 1rem; justify-content: center;">
+    <div class="flex-center-gap">
         <a href="/blog-list" class="btn btn-primary">
             Explore Stories
         </a>
@@ -17,17 +17,17 @@
 </section>
 
 <div class="glass-ui" style="margin-top: 2rem;">
-    <h3 style="margin-bottom: 0.5rem;">New to Blogify?</h3>
+    <h3>New to Blogify?</h3>
     <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
         Join our community of writers today. Create an account to start publishing your own stories.
     </p>
     <% if (!locals.user) { %>
-        <div style="display: flex; gap: 1rem;">
+        <div class="flex-center-gap" style="justify-content: flex-start;">
             <a href="/signup" class="btn btn-primary">Create Account</a>
             <a href="/signin" class="btn btn-secondary">Sign In</a>
         </div>
     <% } else { %>
-        <p>You're already logged in! <a href="/dashboard" class="btn btn-primary" style="margin-left: 1rem;">Go to Dashboard</a></p>
+        <p>You're already logged in! <a href="/dashboard" class="btn btn-primary" style="margin-left: 1rem; width: auto;">Go to Dashboard</a></p>
     <% } %>
 </div>
 

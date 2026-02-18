@@ -5,7 +5,7 @@
     <a href="/new-blog" class="btn btn-primary">Create New Blog</a>
 </div>
 
-<div class="blog-grid" style="margin-top: 2rem;">
+<div class="blog-grid">
     <% if (blogs.length > 0) { %>
         <% blogs.forEach(blog => { %>
             <article class="glass-ui blog-card">
@@ -13,8 +13,8 @@
                     <div class="blog-meta">
                         <%= blog.createdAt.toDateString() %>
                     </div>
-                    <span class="tag" style="background: <%= blog.state === 'published' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(234, 179, 8, 0.1)' %>; color: <%= blog.state === 'published' ? '#22c55e' : '#eab308' %>;">
-                        <%= blog.state.toUpperCase() %>
+                    <span class="tag tag-<%= blog.state %>">
+                        <%= blog.state %>
                     </span>
                 </div>
                 
@@ -22,11 +22,11 @@
                     <%= blog.title %>
                 </h3>
 
-                <div style="display: flex; gap: 0.5rem; margin-top: auto;">
-                    <a href="/blog/<%= blog._id %>" class="btn btn-secondary" style="padding: 0.5rem 0.875rem; font-size: 0.875rem;">View</a>
-                    <a href="/blog/<%= blog._id %>/edit" class="btn btn-secondary" style="padding: 0.5rem 0.875rem; font-size: 0.875rem;">Edit</a>
-                    <form action="/blogs/<%= blog._id %>?_method=DELETE" method="POST" style="flex-grow: 1;">
-                        <button type="submit" class="btn btn-danger" style="width: 100%; padding: 0.5rem 0.875rem; font-size: 0.875rem;" onclick="return confirm('Are you sure you want to delete this blog?')">Delete</button>
+                <div class="flex-center-gap" style="margin-top: auto; justify-content: flex-start;">
+                    <a href="/blog/<%= blog._id %>" class="btn btn-secondary btn-sm" style="flex: 1;">View</a>
+                    <a href="/blog/<%= blog._id %>/edit" class="btn btn-secondary btn-sm" style="flex: 1;">Edit</a>
+                    <form action="/blogs/<%= blog._id %>?_method=DELETE" method="POST" style="flex: 1;">
+                        <button type="submit" class="btn btn-danger btn-sm" style="width: 100%;" onclick="return confirm('Are you sure you want to delete this blog?')">Delete</button>
                     </form>
                 </div>
 

@@ -1,8 +1,8 @@
 <%- include('partials/header') %>
 
-<article style="max-width: 800px; margin: 0 auto;">
-    <header style="margin-bottom: 3rem;">
-        <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+<article class="article-container">
+    <header class="article-header">
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
             <% if (blog.tags) { %>
                 <% blog.tags.split(',').forEach(tag => { %>
                     <span class="tag"><%= tag.trim() %></span>
@@ -12,9 +12,9 @@
         
         <h1><%= blog.title %></h1>
         
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border);">
-            <div style="display: flex; align-items: center; gap: 1rem;">
-                <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.25rem;">
+        <div class="article-meta-bar">
+            <div class="author-info">
+                <div class="author-avatar">
                     <%= blog.author.first_name[0] %>
                 </div>
                 <div>
@@ -29,15 +29,15 @@
         </div>
     </header>
 
-    <div class="glass-ui" style="background: var(--bg-card); padding: 3rem; font-size: 1.125rem; line-height: 1.8; color: #e2e8f0;">
+    <div class="glass-ui article-body">
         <p style="white-space: pre-wrap;"><%= blog.body %></p>
     </div>
 
-    <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
-        <a href="/blog-list" class="btn btn-secondary">← Back to Explore</a>
+    <footer class="article-footer">
+        <a href="/blog-list" class="btn btn-secondary" style="width: auto;">← Back to Explore</a>
         
         <% if (locals.user && locals.user.id === blog.author._id.toString()) { %> 
-            <a href="/blog/<%= blog._id %>/edit" class="btn btn-primary">Edit Original Post</a>
+            <a href="/blog/<%= blog._id %>/edit" class="btn btn-primary" style="width: auto;">Edit Original Post</a>
         <% } %>
     </footer>
 </article>

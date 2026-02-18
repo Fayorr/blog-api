@@ -10,18 +10,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav class="glass-ui" style="margin: 1rem 2rem; border-radius: 1rem;">
-        <a href="/" style="font-size: 1.5rem; font-weight: 700;">Blogify</a>
+    <nav class="glass-ui">
+        <a href="/" class="logo">Blogify</a>
         <div class="nav-links">
             <a href="/blog-list">Explore</a>
             <a href="/blogs">API</a>
             <% if (locals.user) { %>
                 <a href="/dashboard">Dashboard</a>
-                <a href="/new-blog" class="btn btn-primary" style="padding: 0.5rem 1rem;">Create</a>
-                <a href="/auth/logout" style="color: #ef4444;">Logout</a>
+                <a href="/new-blog" class="btn btn-primary btn-sm">Create</a>
+                <a href="/auth/logout" class="logout-link">Logout</a>
             <% } else { %>
                 <a href="/signin">Sign In</a>
-                <a href="/signup" class="btn btn-primary" style="padding: 0.5rem 1rem;">Get Started</a>
+                <a href="/signup" class="btn btn-primary btn-sm">Get Started</a>
             <% } %>
         </div>
     </nav>
