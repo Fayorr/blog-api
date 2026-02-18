@@ -3,33 +3,6 @@ const router = express.Router();
 const BlogService = require('../services/blog.service');
 const authMiddleware = require('../middlewares/auth.middleware');
 
-// Public Landing Page (Static)
-router.get('/', (req, res) => {
-	res.render('home', { user: req.user || null });
-});
-
-// Blog List Page (Dynamic)
-router.get('/blog-list', async (req, res) => {
-	try {
-		const blogs = await BlogService.getAllBlogs({
-			state: 'published',
-			order_by: 'timestamp',
-		});
-		res.render('index', { blogs, user: req.user || null });
-	} catch (error) {
-		res.status(500).send(error.message);
-	}
-});
-
-// Auth Forms
-router.get('/signup', (req, res) => {
-	res.render('signup');
-});
-
-router.get('/signin', (req, res) => {
-	res.render('signin');
-});
-
 // Helper Middlewares for Views
 const checkUser = (req, res, next) => {
 	const token = req.cookies.token;
@@ -62,6 +35,33 @@ const requireAuth = (req, res, next) => {
 };
 
 router.use(checkUser);
+
+// Public Landing Page (Static)
+router.get('/', (req, res) => {
+	res.render('home', { user: req.user || null });
+});
+
+// Blog List Page (Dynamic)
+router.get('/blog-list', async (req, res) => {
+	try {
+		const blogs = await BlogService.getAllBlogs({
+			state: 'published',
+			order_by: 'timestamp',
+		});
+		res.render('index', { blogs, user: req.user || null });
+	} catch (error) {
+		res.status(500).send(error.message);
+	}
+});
+
+// Auth Forms
+router.get('/signup', (req, res) => {
+	res.render('signup');
+});
+
+router.get('/signin', (req, res) => {
+	res.render('signin');
+});
 
 router.get('/dashboard', requireAuth, async (req, res) => {
 	try {
